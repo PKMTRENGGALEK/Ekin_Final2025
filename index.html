@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- BARIS INI DITAMBAHKAN UNTUK MEMPERBAIKI TAMPILAN EMOJI -->
+    <meta charset="UTF-8" />
+
+    <title>Rekap Ekin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+      }
+      /* Transisi halus untuk efek hover */
+      .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 200ms;
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-4 md:p-6"
+  >
+    <div class="max-w-4xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">
+          Rekap Ekin Final 2025
+        </h1>
+        <p class="text-lg text-gray-600">Puskesmas Trenggalek</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="mb-8">
+        <div class="relative w-full md:w-96 mx-auto">
+          <span
+            class="material-symbols-rounded absolute left-4 top-3.5 text-gray-400 text-2xl"
+            >search</span
+          >
+          <input
+            id="searchInput"
+            type="text"
+            placeholder="Cari berdasarkan nama atau NIP..."
+            class="w-full pl-12 pr-4 py-3 text-lg border border-gray-300 rounded-full shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          />
+        </div>
+      </div>
+
+      <!-- Container untuk List Kartu Pegawai -->
+      <div id="pegawai-list" class="space-y-4">
+        <!-- Kartu pegawai akan dimuat oleh JavaScript di sini -->
+      </div>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="text-center py-12">
+        <div
+          class="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"
+        ></div>
+        <p class="mt-4 text-lg text-gray-500">Memuat data...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="text-center py-12 hidden">
+        <span class="material-symbols-rounded text-6xl text-gray-300"
+          >search_off</span
+        >
+        <p class="mt-4 text-lg text-gray-500">Tidak ada data yang ditemukan.</p>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-between items-center mt-10">
+        <button
+          id="prevBtn"
+          class="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 text-base font-medium rounded-full shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          disabled
+        >
+          <span class="material-symbols-rounded text-2xl">chevron_left</span>
+          Sebelumnya
+        </button>
+        <span
+          id="pageInfo"
+          class="text-base font-medium text-gray-700 bg-white px-4 py-2 rounded-full shadow-md"
+        ></span>
+        <button
+          id="nextBtn"
+          class="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 text-base font-medium rounded-full shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          disabled
+        >
+          Selanjutnya
+          <span class="material-symbols-rounded text-2xl">chevron_right</span>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      const url =
+        "https://script.google.com/macros/s/AKfycbwYVv4tt_bOKud0J9PrptoDVgVqPy3xHHsbiWm8QBjmn3xo2R7wU7Dgoe7cAcz73VIuIw/exec";
+
+      // --- STATE MANAGEMENT ---
+      let rawData = [];
+      let filtered = [];
+      let page = 1;
+      let perPage = 5; // Jumlah kartu per halaman
+
+      // --- DOM ELEMENTS ---
+      const listContainer = document.querySelector("#pegawai-list");
+      const searchInput = document.getElementById("searchInput");
+      const pageInfo = document.getElementById("pageInfo");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const loadingState = document.getElementById("loadingState");
+      const emptyState = document.getElementById("emptyState");
+
+      // --- RENDERING ---
+      function renderList() {
+        const start = (page - 1) * perPage;
+        const rows = filtered.slice(start, start + perPage);
+        listContainer.innerHTML = ""; // Kosongkan list sebelum render ulang
+
+        if (rows.length === 0) {
+          listContainer.classList.add("hidden");
+          emptyState.classList.remove("hidden");
+          pageInfo.textContent = `Halaman 0 dari 0`;
+        } else {
+          listContainer.classList.remove("hidden");
+          emptyState.classList.add("hidden");
+          rows.forEach((d) => {
+            listContainer.innerHTML += `
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-800">${d.nama}</h3>
+                        <p class="text-gray-500 mt-1">NIP: ${d.nip}</p>
+                    </div>
+                    <a href="${d.link}" target="_blank" class="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all">
+                        <span class="material-symbols-rounded text-xl">drive_file_move</span>
+                        Buka Drive
+                    </a>
+                </div>
+                `;
+          });
+        }
+
+        // Update informasi pagination
+        const totalPages = Math.ceil(filtered.length / perPage);
+        pageInfo.textContent = `Halaman ${
+          filtered.length > 0 ? page : 0
+        } dari ${totalPages}`;
+
+        // Update status tombol pagination
+        prevBtn.disabled = page === 1;
+        nextBtn.disabled = page >= totalPages || totalPages === 0;
+      }
+
+      // --- DATA MANIPULATION ---
+      function applySearch() {
+        const q = searchInput.value.toLowerCase();
+        filtered = rawData.filter(
+          (d) =>
+            d.nama.toLowerCase().includes(q) || d.nip.toLowerCase().includes(q)
+        );
+        page = 1; // Kembali ke halaman 1 setelah pencarian
+        renderList();
+      }
+
+      // --- EVENT LISTENERS & INITIALIZATION ---
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            rawData = data;
+            filtered = data;
+            loadingState.style.display = "none"; // Sembunyikan loading
+            renderList();
+          })
+          .catch((error) => {
+            console.error("Gagal memuat data:", error);
+            loadingState.innerHTML =
+              '<p class="text-red-500 text-lg">Gagal memuat data. Silakan coba lagi.</p>';
+          });
+
+        searchInput.addEventListener("keyup", applySearch);
+
+        prevBtn.onclick = () => {
+          if (page > 1) page--;
+          renderList();
+        };
+
+        nextBtn.onclick = () => {
+          const totalPages = Math.ceil(filtered.length / perPage);
+          if (page < totalPages) page++;
+          renderList();
+        };
+      });
+    </script>
+  </body>
+</html>
