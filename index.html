@@ -17,87 +17,230 @@
     <style>
       body {
         font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #f8fafc 0%, #eef1f5 100%);
       }
-      /* Transisi halus untuk efek hover */
-      .transition-all {
-        transition-property: all;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 200ms;
+
+      h1 {
+        font-size: 2.25rem !important;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+
+      p,
+      input,
+      button,
+      span,
+      strong,
+      a {
+        font-size: 0.95rem !important;
+      }
+
+      /* Luxury Card */
+      .card-modern {
+        padding: 16px 20px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(230, 232, 238, 0.8);
+        transition: all 0.32s ease;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      }
+
+      .card-modern:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
+        border-color: rgba(210, 212, 218, 0.7);
+      }
+
+      /* Drive Button - subtle luxury */
+      .btn-drive {
+        padding: 7px 18px;
+        font-size: 0.85rem !important;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+        transition: all 0.35s ease;
+        box-shadow: 0 3px 10px rgba(56, 128, 255, 0.28);
+      }
+      .btn-drive:hover {
+        transform: scale(1.06);
+        box-shadow: 0 6px 16px rgba(56, 128, 255, 0.35);
+      }
+
+      /* Search Glass Type */
+      #searchInput {
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        background: rgba(255, 255, 255, 0.8) !important;
+        border-radius: 14px !important;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06) !important;
+      }
+
+      /* Pagination Luxury */
+      #pageInfo {
+        font-size: 0.9rem !important;
+        padding: 7px 18px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(4px);
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+      }
+      #prevBtn,
+      #nextBtn {
+        border-radius: 10px;
+        padding: 7px 18px !important;
+      }
+
+      #prevBtn:hover,
+      #nextBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Info Highlight - Luxury Glow */
+      .info-box {
+        border-radius: 14px;
+        backdrop-filter: blur(8px);
+        background: rgba(255, 243, 205, 0.82);
+        box-shadow: 0 0 14px rgba(255, 215, 80, 0.48);
+        font-size: 0.92rem !important;
+        padding: 8px 14px;
+      }
+
+      /* New Posted Today badge */
+      .posted-today {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #16a34a;
+        font-size: 0.78rem;
+        background: rgba(209, 250, 229, 0.72);
+        padding: 4px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(187, 247, 208, 0.9);
+      }
+
+      @keyframes fadeSlide {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-enter {
+        animation: fadeSlide 0.4s ease forwards;
       }
     </style>
   </head>
-
-  <body
-    class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-4 md:p-6"
-  >
+  <body class="bg-white min-h-screen p-4 md:p-6">
     <div class="max-w-4xl mx-auto">
       <!-- Header -->
-      <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">
+      <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-1">
           Rekap Ekin Final 2025
         </h1>
-        <p class="text-lg text-gray-600">Puskesmas Trenggalek</p>
+        <p class="text-gray-600 text-sm">Puskesmas Trenggalek</p>
       </div>
 
       <!-- Search Bar -->
-      <div class="mb-8">
-        <div class="relative w-full md:w-96 mx-auto">
+      <div class="mb-5">
+        <div class="relative w-full md:w-80 mx-auto">
           <span
-            class="material-symbols-rounded absolute left-4 top-3.5 text-gray-400 text-2xl"
+            class="material-symbols-rounded absolute left-3 top-2 text-gray-400 text-xl"
             >search</span
           >
           <input
             id="searchInput"
             type="text"
             placeholder="Cari berdasarkan nama atau NIP..."
-            class="w-full pl-12 pr-4 py-3 text-lg border border-gray-300 rounded-full shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            class="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-full shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all"
           />
         </div>
       </div>
 
-      <!-- Container untuk List Kartu Pegawai -->
-      <div id="pegawai-list" class="space-y-4">
-        <!-- Kartu pegawai akan dimuat oleh JavaScript di sini -->
-      </div>
+      <!-- Container List -->
+      <div id="pegawai-list" class="space-y-2"></div>
 
-      <!-- Loading State -->
-      <div id="loadingState" class="text-center py-12">
+      <!-- Loading -->
+      <div id="loadingState" class="text-center py-10">
         <div
-          class="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600"
+          class="inline-block animate-spin rounded-full h-10 w-10 border-b-4 border-blue-600"
         ></div>
-        <p class="mt-4 text-lg text-gray-500">Memuat data...</p>
+        <p class="mt-2 text-gray-500 text-sm">Memuat data...</p>
       </div>
 
-      <!-- Empty State -->
-      <div id="emptyState" class="text-center py-12 hidden">
-        <span class="material-symbols-rounded text-6xl text-gray-300"
+      <!-- Empty -->
+      <div id="emptyState" class="text-center py-10 hidden">
+        <span class="material-symbols-rounded text-5xl text-gray-300"
           >search_off</span
         >
-        <p class="mt-4 text-lg text-gray-500">Tidak ada data yang ditemukan.</p>
+        <p class="mt-2 text-gray-500 text-sm">Tidak ada data ditemukan.</p>
       </div>
 
       <!-- Pagination -->
-      <div class="flex justify-between items-center mt-10">
+      <div class="flex justify-between items-center mt-6">
         <button
           id="prevBtn"
-          class="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 text-base font-medium rounded-full shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          class="flex items-center gap-1 px-4 py-2 bg-white text-gray-700 text-sm border rounded-full hover:shadow disabled:opacity-40 transition-all"
           disabled
         >
-          <span class="material-symbols-rounded text-2xl">chevron_left</span>
-          Sebelumnya
+          <span class="material-symbols-rounded text-lg">chevron_left</span>
+          Prev
         </button>
+
         <span
           id="pageInfo"
-          class="text-base font-medium text-gray-700 bg-white px-4 py-2 rounded-full shadow-md"
+          class="text-sm text-gray-700 bg-white px-3 py-1 rounded-full shadow-sm"
         ></span>
+
         <button
           id="nextBtn"
-          class="flex items-center gap-2 px-6 py-3 bg-white text-gray-700 text-base font-medium rounded-full shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          class="flex items-center gap-1 px-4 py-2 bg-white text-gray-700 text-sm border rounded-full hover:shadow disabled:opacity-40 transition-all"
           disabled
         >
-          Selanjutnya
-          <span class="material-symbols-rounded text-2xl">chevron_right</span>
+          Next
+          <span class="material-symbols-rounded text-lg">chevron_right</span>
         </button>
+      </div>
+
+      <!-- INFO GLOW -->
+      <div class="mt-6">
+        <div
+          class="px-5 py-3 rounded-2xl border bg-white shadow-lg flex justify-between items-center"
+          style="
+            border-color: rgba(255, 215, 80, 0.8);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 18px rgba(255, 215, 80, 0.45);
+          "
+        >
+          <!-- KIRI -->
+          <div
+            class="flex items-center gap-2 text-yellow-600 font-semibold text-sm"
+          >
+            <span class="material-symbols-rounded text-xl text-black-500"
+              >info</span
+            >
+            File Upload adalah File Excel Log Book Kinerja 2025
+          </div>
+
+          <!-- KANAN -->
+          <span
+            class="flex items-center gap-1 text-green-700 px-3 py-1 text-xs rounded-full"
+            style="
+              background: rgba(209, 250, 229, 0.8);
+              border: 1px solid rgba(187, 247, 208, 0.9);
+            "
+          >
+            <span class="material-symbols-rounded text-sm">schedule</span>
+            Posted Today
+          </span>
+        </div>
       </div>
     </div>
 
@@ -105,13 +248,11 @@
       const url =
         "https://script.google.com/macros/s/AKfycbwYVv4tt_bOKud0J9PrptoDVgVqPy3xHHsbiWm8QBjmn3xo2R7wU7Dgoe7cAcz73VIuIw/exec";
 
-      // --- STATE MANAGEMENT ---
       let rawData = [];
       let filtered = [];
       let page = 1;
-      let perPage = 5; // Jumlah kartu per halaman
+      let perPage = 7; // tampil lebih banyak (karena sudah compact)
 
-      // --- DOM ELEMENTS ---
       const listContainer = document.querySelector("#pegawai-list");
       const searchInput = document.getElementById("searchInput");
       const pageInfo = document.getElementById("pageInfo");
@@ -120,11 +261,10 @@
       const loadingState = document.getElementById("loadingState");
       const emptyState = document.getElementById("emptyState");
 
-      // --- RENDERING ---
       function renderList() {
         const start = (page - 1) * perPage;
         const rows = filtered.slice(start, start + perPage);
-        listContainer.innerHTML = ""; // Kosongkan list sebelum render ulang
+        listContainer.innerHTML = "";
 
         if (rows.length === 0) {
           listContainer.classList.add("hidden");
@@ -133,68 +273,54 @@
         } else {
           listContainer.classList.remove("hidden");
           emptyState.classList.add("hidden");
+
           rows.forEach((d) => {
             listContainer.innerHTML += `
-                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div class="flex-1">
-                        <h3 class="text-xl font-semibold text-gray-800">${d.nama}</h3>
-                        <p class="text-gray-500 mt-1"><strong>NIP: ${d.nip}  Jabatan : ${d.jabatan}</stong></p>
-                      
-                    </div>
-                    <a href="${d.link}" target="_blank" class="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all">
-                        <span class="material-symbols-rounded text-xl">drive_file_move</span>
-                        Buka Drive
-                    </a>
-                </div>
-                `;
+          <div class="card-modern flex justify-between items-center animate-enter">
+            <div>
+              <h3 class="text-sm font-semibold text-gray-800">${d.nama}</h3>
+              <p class="text-xs text-gray-500">NIP: ${d.nip} | ${d.jabatan}</p>
+            </div>
+            <a href="${d.link}" target="_blank" class="btn-drive text-white">
+              Drive
+            </a>
+          </div>`;
           });
         }
 
-        // Update informasi pagination
         const totalPages = Math.ceil(filtered.length / perPage);
         pageInfo.textContent = `Halaman ${
           filtered.length > 0 ? page : 0
         } dari ${totalPages}`;
-
-        // Update status tombol pagination
         prevBtn.disabled = page === 1;
         nextBtn.disabled = page >= totalPages || totalPages === 0;
       }
 
-      // --- DATA MANIPULATION ---
       function applySearch() {
         const q = searchInput.value.toLowerCase();
         filtered = rawData.filter(
           (d) =>
             d.nama.toLowerCase().includes(q) || d.nip.toLowerCase().includes(q)
         );
-        page = 1; // Kembali ke halaman 1 setelah pencarian
+        page = 1;
         renderList();
       }
 
-      // --- EVENT LISTENERS & INITIALIZATION ---
       document.addEventListener("DOMContentLoaded", () => {
         fetch(url)
           .then((res) => res.json())
           .then((data) => {
             rawData = data;
             filtered = data;
-            loadingState.style.display = "none"; // Sembunyikan loading
+            loadingState.style.display = "none";
             renderList();
-          })
-          .catch((error) => {
-            console.error("Gagal memuat data:", error);
-            loadingState.innerHTML =
-              '<p class="text-red-500 text-lg">Gagal memuat data. Silakan coba lagi.</p>';
           });
 
         searchInput.addEventListener("keyup", applySearch);
-
         prevBtn.onclick = () => {
           if (page > 1) page--;
           renderList();
         };
-
         nextBtn.onclick = () => {
           const totalPages = Math.ceil(filtered.length / perPage);
           if (page < totalPages) page++;
